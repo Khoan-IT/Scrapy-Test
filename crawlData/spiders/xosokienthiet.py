@@ -16,18 +16,18 @@ def get_total_date_month(year,month):
 class SoxokienthietSpider(CrawlSpider):
     name = 'xosokienthiet'
     allowed_domains = ['xskt.com.vn']
-    start_urls = ['https://xskt.com.vn/xsmn/ngay-8-5-2018.html']
+    start_urls = []
 
     month_to_scrap = 5
     year_to_scrap = 2018
     total_date = get_total_date_month(year_to_scrap,month_to_scrap)
 
     def start_requests(self):
-        # for i in range(1,self.total_date):
-        #     self.start_urls.append('https://xskt.com.vn/xsmn/ngay-{0}-{1}-{2}.html'.format(i,self.month_to_scrap,self.year_to_scrap))
+        for i in range(1,self.total_date):
+            self.start_urls.append('https://xskt.com.vn/xsmn/ngay-{0}-{1}-{2}.html'.format(i,self.month_to_scrap,self.year_to_scrap))
 
-        # for i in range(len(self.start_urls)):
-            yield scrapy.Request(self.start_urls[0], callback = self.parse)
+        for i in range(len(self.start_urls)):
+            yield scrapy.Request(self.start_urls[i], callback = self.parse)
 
     # for i in range(1,total_date):
     #     start_urls.append('https://xskt.com.vn/xsmn/ngay-{0}-{1}-{2}.html'.format(i,month_to_scrap,year_to_scrap))
@@ -39,7 +39,8 @@ class SoxokienthietSpider(CrawlSpider):
 
         xs_item['xs_info'] = [
             data_resp.xpath("//*[@id='MN0']/tr[1]/th[1]/a/text()").extract_first(),
-            data_resp.xpath("//*[@id='MN0']/tr[1]/th[1]/text()").extract_first()
+            data_resp.xpath("//*[@id='MN0']/tr[1]/th[1]/text()").extract_first(),
+            str(self.year_to_scrap)
         ]
 
         for i in range(2,5):
